@@ -1,0 +1,129 @@
+body{
+    background-color: #111;
+    font-family: 'Roboto', sans-serif;
+
+}
+
+#wrap{
+    background: #f94040;
+    width: 700px;
+    height: 800px;
+    border-radius: 10px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+}
+
+#banner{
+    width: 100%;
+    position: absolute;
+    top: -150px;
+    left: 0px;
+}
+
+#disk{
+    position: relative;
+    margin: 0 auto;
+    display: block;
+    height: 200px;
+    z-index: 1;
+    margin-top: 80px;
+}
+
+#window{
+    width: 90%;
+    height: 460px;
+    position: relative;
+    top: 30px;
+    margin: 0 auto;
+    display: block;
+    background: #111;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+#search{
+    position: relative;
+    border: none;
+    background: #26262673;
+    color: white;
+    height: 10px;
+    width: 100%;
+    padding: 20px;
+}
+
+#search::placeholder{
+    color: white;
+}
+
+#shelf{
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 415px;
+}
+
+#search:focus {outline:0;}
+.btn:focus {outline:0;}
+
+.slot{
+    position: relative;
+    height: 60px;
+    background: #111;
+    color: white;
+
+}
+
+::-webkit-scrollbar{
+    background-color: black;
+    width: 8px;
+    border-radius: 1px;
+}
+
+::-webkit-scrollbar-thumb{
+    background-color: #3a3a3a;
+    border-radius: 3px;
+    
+}
+
+.title{
+    position: absolute;
+    display: block;
+    top: 19px;
+    left: 80px;
+}
+
+.cover-art{
+    height: 60px;
+}
+
+.btn{
+    height: 30px;
+    border: none;
+    padding: 5px;
+    font-size: 15px;
+    border-radius: 3px;
+    background: #f44242;
+    color: white;
+    transition: transform .05s;
+    cursor: pointer;
+    width: 70px;
+}
+
+.queue{
+    position: absolute;
+    top: 15px;
+    right: 100px;
+}
+
+.play{
+    position: absolute;
+    top: 15px;
+    right: 20px;
+}
+
+.btn:hover{
+    transform: scale(1.05)
+}
+.btn:active{
+    transform: scale(.95)
+}
