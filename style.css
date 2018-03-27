@@ -28,7 +28,10 @@ body{
     height: 200px;
     z-index: 1;
     margin-top: 80px;
+    animation:spin 90s linear infinite;
 }
+
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
 
 #window{
     width: 90%;
@@ -127,3 +130,4 @@ body{
 .btn:active{
     transform: scale(.95)
 }
+
