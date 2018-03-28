@@ -48,12 +48,16 @@ socket.on("albums", pack => {
          var album = getAlbum(song.album)
          if(tableValue != "null" && tableValue != album.shortAlbum) valid = false;
          if(valid){
-         document.getElementById("shelf").innerHTML+= '<div class="slot"> <img draggable="false" src="' + album.art + '" alt="Cover art" title="Cover art" class="cover-art"> <span class="title">' + song.title + '</span> <button class="btn queue" onclick="queue(' + "'" + song.fullName + "'" + ')">Queue</button> <button class="btn play" onclick="play(' + "'" + song.fullName + "'" + ')">Play</button> </div>'
-            staffed++;
+         var name = song.title;
+         if(name.length > 44) name = name.substr(0, 44) + "..."
+         document.getElementById("shelf").innerHTML+= '<div class="slot"> <img draggable="false" src="' + album.art + '" alt="Cover art" title="' + song.fullName + '" class="cover-art"> <span class="title">' + name + '</span> <button class="btn queue" onclick="queue(' + "'" + song.fullName + "'" + ')">Queue</button> <button class="btn play" onclick="play(' + "'" + song.fullName + "'" + ')">Play</button> </div>'
+         staffed++;
         }
         i++;
     }
  }
+
+ document.getElementById("search").focus();
 
  function queue(song){
     socket.emit("queue", song);
