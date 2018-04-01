@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto|Ubuntu" rel="stylesheet">
     <!-- Socket.io -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
     <title>Tunes!</title>
@@ -13,6 +13,7 @@
 <body>
 
     <div id="wrap">
+        <!-- Main wrap -->
         <img src="img/disk.png" alt="" id="disk" draggable="false">
         <img src="img/bg.png" alt="" id="banner" draggable="false">
         
@@ -23,7 +24,10 @@
             <div id="shelf" onscroll="checkPos()">
             </div>
         </div>
+        <!-- Overlay (for displaying news) -->
+        <span id="insert-overlay"></span>
     </div>
+    <div id="extra"><a href="javascript:displayNews(true)">TuneNews!</a></div>
 
     <script src="tunes.js"></script>
     

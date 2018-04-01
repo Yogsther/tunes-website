@@ -150,3 +150,112 @@ body{
 }
 
 #category-table:focus {outline:0;}
+
+
+#overlay{
+    position: absolute;
+    z-index: 50;
+    background: rgba(0,0,0,0.95);
+    height: 700px;
+    width: 600px;
+    top: 20px;
+    border-radius: 10px;
+    left: 50px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+#title{
+    text-align: center;
+    font-size: 30px;
+    color: white;
+    position: relative;
+    display: block;
+    margin: 0 auto;
+    top: 20px;
+    font-family: Ubuntu;
+}
+
+.cover-art-news{
+    height: 100px;
+    position: absolute;
+    left: 10px;
+}
+
+.story{
+    height: 100px;
+    width: 100%;
+    /*background: white;*/
+    top: 0px;
+    position: relative;
+    margin-top: 10px;
+}
+
+.story-description{
+    color: white;
+    position: absolute;
+    top: 40px;
+    width: 400px;
+    height: 60px;
+    left: 140px;
+    font-size: 18.6px;
+}
+
+.date-sign{
+    color: #d6d6d6;
+    position: absolute;
+    top: 70px;
+    width: 400px;
+    height: 60px;
+    left: 140px;
+    font-size: 14.6px;
+}
+
+.story-title{
+    color: white;
+    position: absolute;
+    top: 0px;
+    left: 140px;
+    font-size: 25px;
+}
+
+#close-button{
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+
+#news-room{
+    top: 50px;
+    overflow: auto;
+    position: relative;
+    height: 550px;
+}
+
+#extra{
+    position: relative;
+    height: 100px;
+    width: 700px;
+    margin: 0 auto;
+    text-align: right;
+    margin-top: 10px;
+}
+
+a:link {
+    color: white;
+}
+
+/* visited link */
+a:visited {
+    color: white;
+}
+
+/* mouse over link */
+a:hover {
+    color: #d6d6d6;
+}
+
+/* selected link */
+a:active {
+    color: #d6d6d6;
+}
