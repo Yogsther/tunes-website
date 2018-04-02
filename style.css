@@ -73,7 +73,6 @@ body{
     height: 60px;
     background: #111;
     color: white;
-
 }
 
 ::-webkit-scrollbar{
@@ -113,9 +112,17 @@ body{
 }
 
 .queue{
+    background: #474747;
     position: absolute;
     top: 15px;
     right: 100px;
+}
+
+.star{
+    background: #998a41;
+    position: absolute;
+    top: 15px;
+    right: 180px;
 }
 
 .play{
@@ -136,11 +143,12 @@ body{
     background: none;
     color: white;
     height: 30px;
-    width: 150px;
+    width: 190px;
     position: absolute;
     z-index: 20;
     top: 10px;
     right: 10px;
+    text-align: center;
 }
 
 .table-values{
@@ -235,7 +243,7 @@ body{
 
 #extra{
     position: relative;
-    height: 100px;
+    height: 10px;
     width: 700px;
     margin: 0 auto;
     text-align: right;

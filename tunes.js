@@ -5,11 +5,19 @@ var songs = new Array();
 var news = new Array();
 socket.emit("getSongs");
 
+var starredSongs = JSON.parse(readCookie("starredSongs"));
+if(starredSongs == undefined){
+    createCookie("starredSongs", JSON.stringify(new Array()), 100000);
+    starredSongs = JSON.parse(readCookie("starredSongs"));
+}
+
 var playedSongs = readCookie("playedSongs");
-if(playedSongs == undefined) createCookie("playedSongs", 0, 100000);
+if(playedSongs == undefined){
+    createCookie("playedSongs", 0, 100000);
+    playedSongs = readCookie("playedSongs");
+}
+
 updateColor();
-
-
 
 socket.on("albums", pack => {
     albums = pack;
@@ -58,6 +66,8 @@ function fillTable() {
     });
 
     document.getElementById("category-table").innerHTML = '<option value="null" class="table-values">All songs ' + "(" + songs.length + ")" + '</option>'
+    document.getElementById("category-table").innerHTML += '<option value="starred" class="table-values">Starred songs ' + "(" + starredSongs.length + ")" + '</option>'
+    
     albums.forEach(album => {
         document.getElementById("category-table").innerHTML += '<option value="' + album.shortAlbum + '" class="table-values">' + album.shortAlbum + " (" + album.size + ")" + '</option>'
     })
@@ -77,15 +87,20 @@ function fillMore() {
             if (search[i] != false && song.fullName.toLowerCase().indexOf(search[i].toLowerCase()) == -1) valid = false;
         }
         var album = getAlbum(song.album)
-        if (tableValue != "null" && tableValue != album.shortAlbum) valid = false;
+        if (tableValue != "null" && tableValue != album.shortAlbum && tableValue != "starred") valid = false;
+        if (tableValue == "starred" && indexOfStarredSong(song.fullName) != -1) valid = false;
+
         if (valid) {
             songsShown++;
             displayedSongs[i] = song;
             var name = song.title;
-            console.log(song)
-            if (name.length > 44) name = name.substr(0, 44) + "...";
+            if (name.length > 34) name = name.substr(0, 34) + "...";
             document.getElementById("shelf").innerHTML += "<div class='slot'> <img draggable='false' src='" + album.art + "' alt='Cover art' title='" + song.fullName + "' class='cover-art'> <span class='title'>" + name + "</span> <button class='btn queue' onclick='queue(" + i + ")'>Queue</button> <button class='btn play' onclick='play(" + i + ")'>Play</button> </div>";
             staffed++;
+            if(indexOfStarredSong(song.fullName) != -1){
+                document.getElementsByClassName("star")[staffed].innerHTML = "Unstar";
+                document.getElementsByClassName("star")[staffed].style.background = "#c1b462";
+            }
         }
         i++;
     }
@@ -110,13 +125,18 @@ function fillShelf() {
             if (search[i] != false && song.fullName.toLowerCase().indexOf(search[i].toLowerCase()) == -1) valid = false;
         }
         var album = getAlbum(song.album)
-        if (tableValue != "null" && tableValue != album.shortAlbum) valid = false;
+        if (tableValue != "null" && tableValue != album.shortAlbum && tableValue != "starred") valid = false;
+        if (tableValue == "starred" && indexOfStarredSong(song.fullName) == -1) valid = false;
         if (valid) {
             songsShown++;
             displayedSongs[i] = song;
             var name = song.title;
-            if (name.length > 44) name = name.substr(0, 44) + "...";
-            document.getElementById("shelf").innerHTML += "<div class='slot'> <img draggable='false' src='" + album.art + "' alt='Cover art' title='" + song.fullName + "' class='cover-art'> <span class='title'>" + name + "</span> <button class='btn queue' onclick='queue(" + i + ")'>Queue</button> <button class='btn play' onclick='play(" + i + ")'>Play</button> </div>";
+            if (name.length > 33) name = name.substr(0, 33) + "...";
+            document.getElementById("shelf").innerHTML += "<div class='slot'> <img draggable='false' src='" + album.art + "' alt='Cover art' title='" + song.fullName + "' class='cover-art'> <span class='title'>" + name + "</span><button class='btn star' onclick='star(" + i + ")'>Star</button> <button class='btn queue' onclick='queue(" + i + ")'>Queue</button> <button class='btn play' onclick='play(" + i + ")'>Play</button> </div>";
+            if(indexOfStarredSong(song.fullName) != -1){
+                document.getElementsByClassName("star")[staffed].innerHTML = "Unstar";
+                document.getElementsByClassName("star")[staffed].style.background = "#c1b462";
+            }
             staffed++;
         }
         i++;
@@ -194,6 +214,43 @@ function play(id) {
     song = JSON.stringify(song);
     socket.emit("play", song);
 }
+
+function star(id){
+    
+    var song = displayedSongs[id].fullName;
+    var index = indexOfStarredSong(song);
+    var color;
+    var status
+    var btnColor;
+    if(index == -1){
+        // Star song
+        starredSongs.push(song); // Add to array
+        color = "#353119";
+        btnColor = "#c1b462";
+        status = "Unstar"
+    } else {
+        // Unstar song
+        starredSongs.splice(index, 1); // Remove from array
+        color = "#111";
+        btnColor = "#998a41";
+        status = "Star"
+    }
+
+    document.getElementsByClassName("star")[id].style.background = btnColor;
+    document.getElementsByClassName("star")[id].innerHTML = status
+    fillTable();
+    //document.getElementsByClassName("slot")[id].style.background = color; // Change color of slot
+    createCookie("starredSongs", JSON.stringify(starredSongs), 100000); // Save
+    
+}
+
+function indexOfStarredSong(songName){
+    for(let i = 0; i < starredSongs.length; i++){
+        if(starredSongs[i] == songName) return i;
+    }
+    return -1;
+}
+
 
 
 function increasePlay(){
