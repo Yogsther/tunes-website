@@ -5,11 +5,15 @@ var songs = new Array();
 var news = new Array();
 socket.emit("getSongs");
 
+var playedSongs = readCookie("playedSongs");
+if(playedSongs == undefined) createCookie("playedSongs", 0, 100000);
+updateColor();
+
+
 
 socket.on("albums", pack => {
     albums = pack;
 });
-
 
 /* Basic listener */
 socket.on("songs", function (package) {
@@ -130,9 +134,9 @@ function displayNews(displayAllNews) {
     if (lastVisit == undefined) lastVisit = 0;
 
     function dated(a, b) {
-        if (a.date < b.date)
-            return -1;
         if (a.date > b.date)
+            return -1;
+        if (a.date < b.date)
             return 1;
         return 0;
     }
@@ -143,7 +147,7 @@ function displayNews(displayAllNews) {
         return; // No new news for the user
     }
 
-    var overlay = '<div id="overlay"><span id="title">TuneNews!</span> <div id="news-room"> </div> <button id="close-button" onclick="clearOverlay()" class="btn" title="Hint: you can also close by hitting espace or clicking outside the overlay."> Close </button></div>';
+    var overlay = '<div id="overlay"><img id="news-banner" draggable="false" src="img/tunenews-banner.png"> <div id="news-room"> </div> <button id="close-button" onclick="clearOverlay()" class="btn" title="Hint: you can also close by hitting espace or clicking outside the overlay."> Close </button></div>';
     document.getElementById("insert-overlay").innerHTML = overlay;
 
     for(let i = 0; i < news.length; i++){
@@ -178,15 +182,30 @@ function clearOverlay(){
 }
 
 function queue(id) {
+    increasePlay();
     var song = displayedSongs[id].fullName;
     song = JSON.stringify(song);
     socket.emit("queue", song);
 }
 
 function play(id) {
+    increasePlay();
     var song = displayedSongs[id].fullName;
     song = JSON.stringify(song);
     socket.emit("play", song);
+}
+
+
+function increasePlay(){
+    playedSongs++;
+    createCookie("playedSongs", playedSongs, 10000);
+    updateColor();
+}
+
+function updateColor(){
+    if(playedSongs >= 100){
+        document.getElementById("wrap").style.background = "#68a9ff";
+    }
 }
 
 function getAlbum(album) {
