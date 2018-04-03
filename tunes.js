@@ -6,18 +6,18 @@ var news = new Array();
 socket.emit("getSongs");
 
 var starredSongs = JSON.parse(readCookie("starredSongs"));
-if(starredSongs == undefined){
+if (starredSongs == undefined) {
     createCookie("starredSongs", JSON.stringify(new Array()), 100000);
     starredSongs = JSON.parse(readCookie("starredSongs"));
 }
 
 var playedSongs = readCookie("playedSongs");
-if(playedSongs == undefined){
+if (playedSongs == undefined) {
     createCookie("playedSongs", 0, 100000);
     playedSongs = readCookie("playedSongs");
 }
 
-updateColor();
+/* updateColor(); */
 
 socket.on("albums", pack => {
     albums = pack;
@@ -67,7 +67,7 @@ function fillTable() {
 
     document.getElementById("category-table").innerHTML = '<option value="null" class="table-values">All songs ' + "(" + songs.length + ")" + '</option>'
     document.getElementById("category-table").innerHTML += '<option value="starred" class="table-values">Starred songs ' + "(" + starredSongs.length + ")" + '</option>'
-    
+
     albums.forEach(album => {
         document.getElementById("category-table").innerHTML += '<option value="' + album.shortAlbum + '" class="table-values">' + album.shortAlbum + " (" + album.size + ")" + '</option>'
     })
@@ -97,7 +97,7 @@ function fillMore() {
             if (name.length > 34) name = name.substr(0, 34) + "...";
             document.getElementById("shelf").innerHTML += "<div class='slot'> <img draggable='false' src='" + album.art + "' alt='Cover art' title='" + song.fullName + "' class='cover-art'> <span class='title'>" + name + "</span> <button class='btn queue' onclick='queue(" + i + ")'>Queue</button> <button class='btn play' onclick='play(" + i + ")'>Play</button> </div>";
             staffed++;
-            if(indexOfStarredSong(song.fullName) != -1){
+            if (indexOfStarredSong(song.fullName) != -1) {
                 document.getElementsByClassName("star")[staffed].innerHTML = "Unstar";
                 document.getElementsByClassName("star")[staffed].style.background = "#c1b462";
             }
@@ -133,7 +133,7 @@ function fillShelf() {
             var name = song.title;
             if (name.length > 33) name = name.substr(0, 33) + "...";
             document.getElementById("shelf").innerHTML += "<div class='slot'> <img draggable='false' src='" + album.art + "' alt='Cover art' title='" + song.fullName + "' class='cover-art'> <span class='title'>" + name + "</span><button class='btn star' onclick='star(" + i + ")'>Star</button> <button class='btn queue' onclick='queue(" + i + ")'>Queue</button> <button class='btn play' onclick='play(" + i + ")'>Play</button> </div>";
-            if(indexOfStarredSong(song.fullName) != -1){
+            if (indexOfStarredSong(song.fullName) != -1) {
                 document.getElementsByClassName("star")[staffed].innerHTML = "Unstar";
                 document.getElementsByClassName("star")[staffed].style.background = "#c1b462";
             }
@@ -148,7 +148,7 @@ document.getElementById("search").focus();
 
 
 function displayNews(displayAllNews) {
-    if(displayAllNews == undefined) displayAllNews = false;
+    if (displayAllNews == undefined) displayAllNews = false;
 
     var lastVisit = readCookie("lastVisit");
     if (lastVisit == undefined) lastVisit = 0;
@@ -170,8 +170,8 @@ function displayNews(displayAllNews) {
     var overlay = '<div id="overlay"><img id="news-banner" draggable="false" src="img/tunenews-banner.png"> <div id="news-room"> </div> <button id="close-button" onclick="clearOverlay()" class="btn" title="Hint: you can also close by hitting espace or clicking outside the overlay."> Close </button></div>';
     document.getElementById("insert-overlay").innerHTML = overlay;
 
-    for(let i = 0; i < news.length; i++){
-        if(displayAllNews || lastVisit < news[i].date){
+    for (let i = 0; i < news.length; i++) {
+        if (displayAllNews || lastVisit < news[i].date) {
             // Display story
             var date = new Date(news[i].date);
             document.getElementById("news-room").innerHTML += '<div class="story"> <img src="' + news[i].img + '" alt="Cover art" title="Cover art" class="cover-art-news" draggable="false"> <span class="story-title">' + news[i].title + '</span> <span class="story-description">' + news[i].description + '</span> <span class="date-sign">' + date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear() + '</span> </div>';
@@ -183,7 +183,7 @@ function displayNews(displayAllNews) {
 }
 
 document.addEventListener("keydown", key => {
-    if(key.key == "Escape"){
+    if (key.key == "Escape") {
         clearOverlay();
     }
 })
@@ -191,13 +191,13 @@ document.addEventListener("keydown", key => {
 document.addEventListener("click", e => {
     var path = e.path;
     var outside = true;
-    for(let i = 0; i < path.length; i++){
-        if(path[i].id == "overlay") outside = false;
+    for (let i = 0; i < path.length; i++) {
+        if (path[i].id == "overlay") outside = false;
     }
-    if(outside) clearOverlay();
+    if (outside) clearOverlay();
 })
 
-function clearOverlay(){
+function clearOverlay() {
     document.getElementById("insert-overlay").innerHTML = "";
 }
 
@@ -215,14 +215,13 @@ function play(id) {
     socket.emit("play", song);
 }
 
-function star(id){
-    
+function star(id) {
     var song = displayedSongs[id].fullName;
     var index = indexOfStarredSong(song);
     var color;
     var status
     var btnColor;
-    if(index == -1){
+    if (index == -1) {
         // Star song
         starredSongs.push(song); // Add to array
         color = "#353119";
@@ -241,29 +240,29 @@ function star(id){
     fillTable();
     //document.getElementsByClassName("slot")[id].style.background = color; // Change color of slot
     createCookie("starredSongs", JSON.stringify(starredSongs), 100000); // Save
-    
+
 }
 
-function indexOfStarredSong(songName){
-    for(let i = 0; i < starredSongs.length; i++){
-        if(starredSongs[i] == songName) return i;
+function indexOfStarredSong(songName) {
+    for (let i = 0; i < starredSongs.length; i++) {
+        if (starredSongs[i] == songName) return i;
     }
     return -1;
 }
 
 
 
-function increasePlay(){
+function increasePlay() {
     playedSongs++;
     createCookie("playedSongs", playedSongs, 10000);
-    updateColor();
+    /* updateColor(); */
 }
 
-function updateColor(){
-    if(playedSongs >= 100){
+/* function updateColor() {
+    if (playedSongs >= 100) {
         document.getElementById("wrap").style.background = "#68a9ff";
     }
-}
+} */
 
 function getAlbum(album) {
     for (let i = 0; i < albums.length; i++) {
