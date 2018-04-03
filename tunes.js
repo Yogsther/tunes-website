@@ -37,10 +37,12 @@ socket.on("news", data => {
 })
 
 function getSizeOfAlumbs() {
+    albums.forEach(album => {
+        album.size = 0;
+    })
     songs.forEach(song => {
         for (let i = 0; i < albums.length; i++) {
             if (albums[i].fullAlbum == song.album) {
-                if (albums[i].size == undefined) albums[i].size = 0;
                 albums[i].size++;
             }
         }
@@ -95,7 +97,7 @@ function fillMore() {
             displayedSongs[i] = song;
             var name = song.title;
             if (name.length > 34) name = name.substr(0, 34) + "...";
-            document.getElementById("shelf").innerHTML += "<div class='slot'> <img draggable='false' src='" + album.art + "' alt='Cover art' title='" + song.fullName + "' class='cover-art'> <span class='title'>" + name + "</span> <button class='btn queue' onclick='queue(" + i + ")'>Queue</button> <button class='btn play' onclick='play(" + i + ")'>Play</button> </div>";
+            document.getElementById("shelf").innerHTML += "<div class='slot'> <img draggable='false' src='" + album.art + "' alt='Cover art' title='" + song.fullName + "' class='cover-art'> <span class='title'>" + name + "</span><button class='btn star' onclick='star(" + i + ", this)'>Star</button> <button class='btn queue' onclick='queue(" + i + ")'>Queue</button> <button class='btn play' onclick='play(" + i + ")'>Play</button> </div>";
             staffed++;
             if (indexOfStarredSong(song.fullName) != -1) {
                 document.getElementsByClassName("star")[staffed].innerHTML = "Unstar";
@@ -132,7 +134,7 @@ function fillShelf() {
             displayedSongs[i] = song;
             var name = song.title;
             if (name.length > 33) name = name.substr(0, 33) + "...";
-            document.getElementById("shelf").innerHTML += "<div class='slot'> <img draggable='false' src='" + album.art + "' alt='Cover art' title='" + song.fullName + "' class='cover-art'> <span class='title'>" + name + "</span><button class='btn star' onclick='star(" + i + ")'>Star</button> <button class='btn queue' onclick='queue(" + i + ")'>Queue</button> <button class='btn play' onclick='play(" + i + ")'>Play</button> </div>";
+            document.getElementById("shelf").innerHTML += "<div class='slot'> <img draggable='false' src='" + album.art + "' alt='Cover art' title='" + song.fullName + "' class='cover-art'> <span class='title'>" + name + "</span><button class='btn star' onclick='star(" + i + ", this)'>Star</button> <button class='btn queue' onclick='queue(" + i + ")'>Queue</button> <button class='btn play' onclick='play(" + i + ")'>Play</button> </div>";
             if (indexOfStarredSong(song.fullName) != -1) {
                 document.getElementsByClassName("star")[staffed].innerHTML = "Unstar";
                 document.getElementsByClassName("star")[staffed].style.background = "#c1b462";
@@ -215,7 +217,7 @@ function play(id) {
     socket.emit("play", song);
 }
 
-function star(id) {
+function star(id, element) {
     var song = displayedSongs[id].fullName;
     var index = indexOfStarredSong(song);
     var color;
@@ -235,8 +237,8 @@ function star(id) {
         status = "Star"
     }
 
-    document.getElementsByClassName("star")[id].style.background = btnColor;
-    document.getElementsByClassName("star")[id].innerHTML = status
+    element.style.background = btnColor;
+    element.innerHTML = status
     fillTable();
     //document.getElementsByClassName("slot")[id].style.background = color; // Change color of slot
     createCookie("starredSongs", JSON.stringify(starredSongs), 100000); // Save
