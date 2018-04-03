@@ -138,6 +138,12 @@ body{
     transform: scale(.95)
 }
 
+#queue-songs{
+    width: 110px;
+    right: 230px;
+    top: 10px;
+}
+
 #category-table{
     border: none;
     background: none;

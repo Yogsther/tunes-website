@@ -217,6 +217,40 @@ function play(id) {
     socket.emit("play", song);
 }
 
+function massQueue(){
+    var massQ = new Array();
+    for(let i = 0; i < displayedSongs.length; i++){
+        if(displayedSongs[i] != undefined){
+            massQ.push(displayedSongs[i])
+        }
+    }
+
+    massQ = shuffle(massQ);
+    socket.emit("massQueue", massQ);
+}
+
+
+function shuffle(array) {
+    let counter = array.length;
+
+    // While there are elements in the array
+    while (counter > 0) {
+        // Pick a random index
+        let index = Math.floor(Math.random() * counter);
+
+        // Decrease counter by 1
+        counter--;
+
+        // And swap the last element with it
+        let temp = array[counter];
+        array[counter] = array[index];
+        array[index] = temp;
+    }
+
+    return array;
+}
+
+
 function star(id, element) {
     var song = displayedSongs[id].fullName;
     var index = indexOfStarredSong(song);

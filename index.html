@@ -19,6 +19,7 @@
         
         <div id="window">
             <input type="text" id="search" placeholder="Search" oninput="update()">
+            <button class="btn queue" id="queue-songs" title="'Mass Queue' all loaded songs below." onclick="massQueue()"> Queue songs </button>
             <select id="category-table" oninput="update()">
               </select>
             <div id="shelf" onscroll="checkPos()">
