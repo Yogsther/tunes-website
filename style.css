@@ -249,6 +249,7 @@ body{
 
 #extra{
     position: relative;
+    display: block;
     height: 10px;
     width: 700px;
     margin: 0 auto;
@@ -258,6 +259,7 @@ body{
 
 a:link {
     color: white;
+    text-decoration: none;
 }
 
 /* visited link */

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto|Ubuntu" rel="stylesheet">
+    <!-- Socket.io -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+    <title>Download!</title>
+</head>
+
+<body>
+
+
+    <div id="wrap">
+        <!-- Main wrap -->
+        <img src="img/disk.png" alt="" id="disk" draggable="false">
+        <img src="img/bg.png" alt="" id="banner" draggable="false">
+
+        <div id="window">
+
+            <input type="text" placeholder="Youtube URL" id="link">
+            <input type="text" placeholder="Title" id="title">
+            <select id="category-table-download">
+            </select>
+            <input type="password" placeholder="Token" id="token">
+
+            <button id="download" onclick="requestDownload()">Download song</button>
+
+            <div id="background-bar">
+                <div id="bar"></div>
+            </div>
+            
+            <span id="error"></span>
+            <span id="success"></span>
+        </div>
+
+    </div>
+
+
+    <style>
+
+        #bar{
+            height: 30px;
+            display: absolute;
+            top: 0px;
+            left: 0px;
+            width: 0%;
+            background: #3dce3d;
+            transition: all 1s;
+        }
+
+        #background-bar{
+            width: 90%;
+            display: block;
+            height: 30px;
+            background: #353535;
+            margin: 0 auto;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        #error{
+            width: 90%;
+            margin: 0 auto; 
+            margin-top: 10px;
+            color: red;
+            display: block;
+        }
+
+        #success{
+            width: 90%;
+            margin: 0 auto; 
+            margin-top: 10px;
+            display: block;
+            color: lightgreen;
+        }
+
+        input {
+            width: 90%;
+            height: 30px;
+            margin: 0 auto;
+            display: block;
+            position: relative;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: none;
+            background: none;
+            color: white;
+
+        }
+
+        select{
+            width: 90%;
+            margin: 0 auto;
+            display: block;
+
+        }
+
+        #download{
+            width: 90%;
+            margin: 0 auto;
+            display: block;
+            position: relative;
+        }
+    </style>
+
+
+    <script>
+        var socket = io.connect("213.66.254.63:3074");
+        socket.emit("getSongs");
+
+        var songs;
+        var albums;
+        socket.on("songs", function (package) {
+            songs = package;
+            fillTable();
+        });
+
+        socket.on("albums", pack => {
+            albums = pack;
+        });
+
+        function requestDownload(){
+            var pack = {
+                link: document.getElementById("link").value,
+                album: document.getElementById("category-table-download").value,
+                token: document.getElementById("token").value,
+                title: document.getElementById("title").value
+            }
+            if(confirm("Are you sure you want to download " + pack.title + "?")) socket.emit("download", pack);     
+        }
+
+        socket.on("success", () => {
+            document.getElementById("success").innerHTML = "Success!";
+            document.getElementById("error").innerHTML = "";
+        })
+
+        socket.on("progress", (progress) => {
+            document.getElementById("success").innerHTML = "Downloading, " + Math.round(progress)+"%";
+            document.getElementById("bar").style.width = Math.round(progress)+"%";
+        })
+
+        socket.on("finished", () => {
+            document.getElementById("success").innerHTML = "Song has finished downloading!";
+            document.getElementById("bar").style.width = "100%";
+        })
+
+        socket.on("err", err => {
+            document.getElementById("success").innerHTML = "";
+            document.getElementById("error").innerHTML = err;
+        })
+
+        function getSizeOfAlumbs() {
+            albums.forEach(album => {
+                album.size = 0;
+            })
+            songs.forEach(song => {
+                for (let i = 0; i < albums.length; i++) {
+                    if (albums[i].fullAlbum == song.album) {
+                        albums[i].size++;
+                    }
+                }
+            })
+        }
+
+        var starredSongs = new Array();
+
+
+        function fillTable() {
+
+            getSizeOfAlumbs();
+
+            albums.sort(function (a, b) {
+                var textA = a.shortAlbum.toUpperCase();
+                var textB = b.shortAlbum.toUpperCase();
+                return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+            });
+
+            document.getElementById("category-table-download").innerHTML =
+                '<option value="null" class="table-values">Choose album' + '</option>'
+
+            albums.forEach(album => {
+                document.getElementById("category-table-download").innerHTML += '<option value="' + album.fullAlbum +
+                    '" class="table-values">' + album.shortAlbum  + '</option>'
+            })
+
+        }
+    </script>
+
+</body>
+
+</html>
