@@ -33,7 +33,7 @@ socket.on("songs", function (package) {
 
 socket.on("news", data => {
     news = data;
-    displayNews();
+    //displayNews();
 })
 
 function getSizeOfAlumbs() {
