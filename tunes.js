@@ -1,4 +1,4 @@
-var socket = io.connect("213.66.254.63:12345");
+var socket = io.connect("nut.livfor.it:12345");
 
 var albums = new Array();
 var songs = new Array();
