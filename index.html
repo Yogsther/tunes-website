@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,28 +11,36 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
     <title>Tunes!</title>
 </head>
-<body>
 
-    <div id="wrap">
-        <!-- Main wrap -->
-        <img src="img/disk.png" alt="" id="disk" draggable="false">
-        <img src="img/bg.png" alt="" id="banner" draggable="false">
-        
-        <div id="window">
-            <input type="text" id="search" placeholder="Search" oninput="update()">
-            <button class="btn queue" id="queue-songs" title="'Mass Queue' all loaded songs below." onclick="   "> Queue songs </button>
-            <select id="category-table" oninput="update()">
-              </select>
-            <div id="shelf" onscroll="checkPos()">
+<body>
+    <div id="wrap-wrap">
+        <div id="wrap">
+            <!-- Main wrap -->
+            <img src="img/disk.png" alt="" id="disk" draggable="false">
+            <img src="img/bg.png" alt="" id="banner" draggable="false">
+
+            <div id="window">
+                <input type="text" id="search" placeholder="Search" oninput="update()">
+                <button class="btn queue" id="queue-songs" title="'Mass Queue' all loaded songs below." onclick="massQueue()">
+                    Queue songs </button>
+                <select id="category-table" oninput="update()">
+                </select>
+                <div id="shelf" onscroll="checkPos()">
+                </div>
             </div>
+            <!-- Overlay (for displaying news) -->
+            <span id="insert-overlay"></span>
+
         </div>
-        <!-- Overlay (for displaying news) -->
-        <span id="insert-overlay"></span>
+        <img src="img/overlay.png" id="overlay-sketch" alt="">
     </div>
-    <div id="extra"><a href="javascript:displayNews(true)">TuneNews!</a></div>
-    <div id="extra"><a href="/download.html">Download a song!</a></div>
+
+    
+    <div id="extra"><a href="/download.html"><img src="img/add-music-button.png" id="download-button" alt=""></a></div>
+
 
     <script src="tunes.js"></script>
-    
+
 </body>
+
 </html>
