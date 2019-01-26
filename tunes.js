@@ -31,6 +31,13 @@ socket.on("songs", function (package) {
     fillShelf();
 });
 
+var animation_tick = 0;
+setInterval(() => {
+    if(animation_tick % 2 == 0) document.getElementById("overlay-sketch").src = "img/overlay_2.png";
+        else document.getElementById("overlay-sketch").src = "img/overlay.png"
+    animation_tick++;
+}, 200)
+
 socket.on("news", data => {
     news = data;
     //displayNews();
